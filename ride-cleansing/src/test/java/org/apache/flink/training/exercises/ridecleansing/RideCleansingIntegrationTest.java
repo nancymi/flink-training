@@ -26,7 +26,6 @@ import org.apache.flink.training.exercises.testing.ComposedPipeline;
 import org.apache.flink.training.exercises.testing.ExecutablePipeline;
 import org.apache.flink.training.exercises.testing.ParallelTestSource;
 import org.apache.flink.training.exercises.testing.TestSink;
-import org.apache.flink.training.solutions.ridecleansing.RideCleansingSolution;
 
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -67,7 +66,7 @@ public class RideCleansingIntegrationTest extends RideCleansingTestBase {
         ExecutablePipeline<TaxiRide, TaxiRide> exercise =
                 (source, sink) -> (new RideCleansingExercise(source, sink)).execute();
         ExecutablePipeline<TaxiRide, TaxiRide> solution =
-                (source, sink) -> (new RideCleansingSolution(source, sink)).execute();
+                (source, sink) -> (new RideCleansingExercise(source, sink)).execute();
 
         return new ComposedPipeline<>(exercise, solution);
     }

@@ -15,10 +15,20 @@
  * limitations under the License.
  */
 
+buildscript {
+    ext.kotlin_version = '1.5.31'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
     id "com.diffplug.spotless" version "6.4.2" apply false
 }
+apply plugin: 'kotlin'
 
 description = "Flink Training Exercises"
 
@@ -86,6 +96,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'kotlin'
     if (project.properties['org.gradle.project.enable_scala'].trim() == 'true') {
         apply plugin: 'scala'
     }
@@ -99,6 +110,7 @@ subprojects {
         scalaBinaryVersion = '2.12'
         log4jVersion = '2.12.1'
         junitVersion = '4.13'
+        kafkaVersion = '3.2.2'
     }
 
     sourceCompatibility = javaVersion
@@ -128,8 +140,15 @@ subprojects {
 
         shadow "org.apache.flink:flink-clients:${flinkVersion}"
         shadow "org.apache.flink:flink-java:${flinkVersion}"
+        shadow "org.apache.flink:flink-json:${flinkVersion}"
+
         shadow "org.apache.flink:flink-streaming-java:${flinkVersion}"
         shadow "org.apache.flink:flink-streaming-scala_${scalaBinaryVersion}:${flinkVersion}"
+        shadow "org.apache.flink:flink-connector-datagen:${flinkVersion}"
+        shadow "org.apache.flink:flink-connector-kafka:${flinkVersion}"
+
+        // Kafka
+        shadow "org.apache.kafka:kafka-clients:${kafkaVersion}"
 
         // allows using Flink's web UI when running in the IDE:
         shadow "org.apache.flink:flink-runtime-web:${flinkVersion}"
@@ -270,6 +289,22 @@ tasks.register('printRunTasks') {
                 println './gradlew :' + project.name + ':' + task.name
             }
         }
+    }
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 

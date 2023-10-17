@@ -21,5 +21,6 @@ ext.javaSolutionClassName = 'org.apache.flink.training.solutions.ridecleansing.R
 ext.scalaSolutionClassName = 'org.apache.flink.training.solutions.ridecleansing.scala.RideCleansingSolution'
 
 apply plugin: 'application'
+apply plugin: 'kotlin'
 
 mainClassName = ext.javaExerciseClassName
